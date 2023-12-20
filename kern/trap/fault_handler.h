@@ -70,6 +70,6 @@ void dyn_alloc_local_scope_method(struct Env * curenv, uint32 fault_va);
 void page_fault_handler(struct Env * curenv, uint32 fault_va);
 void table_fault_handler(struct Env * curenv, uint32 fault_va);
 
-void readpagefromPF(struct Env * curenv, uint32 fault_va);
+//void readpagefromPF(struct Env * curenv, uint32 fault_va);
 
 #endif /* KERN_FAULT_HANDLER_H_ */

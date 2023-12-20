@@ -21,44 +21,44 @@ int initialize_kheap_dynamic_allocator(uint32 daStart, uint32 initSizeToAllocate
 	//panic("not implemented yet");
 
 	kheapStart = daStart;
-		brk = initSizeToAllocate + daStart;
-		hardLimit = daLimit;
-		//case no memory
-		//size > limit
-		if(brk > daLimit)
-		{
+	brk = initSizeToAllocate + daStart;
+	hardLimit = daLimit;
+	//case no memory
+	//size > limit
+	if(brk > daLimit)
+	{
+		return E_NO_MEM;
+	}
+
+	for(uint32 i = kheapStart; i < brk; i +=PAGE_SIZE)
+	{
+		struct FrameInfo *frame_ptr;
+		int ret = allocate_frame(&frame_ptr);
+		if(ret !=0){
 			return E_NO_MEM;
 		}
-
-		for(uint32 i = kheapStart; i < brk; i +=PAGE_SIZE)
-		{
-			struct FrameInfo *frame_ptr;
-			int ret = allocate_frame(&frame_ptr);
-			if(ret !=0){
-				return E_NO_MEM;
-			}
-			ret = map_frame(ptr_page_directory, frame_ptr, i, PERM_PRESENT | PERM_WRITEABLE);
-			if(ret != 0){
-				return E_NO_MEM;
-			}
-			frame_ptr->va = i;///////////////////////
-
+		ret = map_frame(ptr_page_directory, frame_ptr, i, PERM_PRESENT | PERM_WRITEABLE);
+		if(ret != 0){
+			return E_NO_MEM;
 		}
+		frame_ptr->va = i;///////////////////////
 
-		initialize_dynamic_allocator(daStart, initSizeToAllocate);
-		//cprintf("after calling dynamic allocator initialization \n");
+	}
 
-		//cprintf("before initializing sizeblock_list \n");
+	initialize_dynamic_allocator(daStart, initSizeToAllocate);
+	//cprintf("after calling dynamic allocator initialization \n");
 
-
-		//uint32 sizeblockliststart = hardLimit;
-
-
+	//cprintf("before initializing sizeblock_list \n");
 
 
-		//cprintf("after initialzing sizeblock_list \n");
-		//cprintf("max size of sizeblocklist = %d", sizeOfBlockInfo() * firstBlock->numofpagesleft);
-		return 0;
+	//uint32 sizeblockliststart = hardLimit;
+
+
+
+
+	//cprintf("after initialzing sizeblock_list \n");
+	//cprintf("max size of sizeblocklist = %d", sizeOfBlockInfo() * firstBlock->numofpagesleft);
+	return 0;
 }
 
 void* sbrk(int increment)
@@ -172,7 +172,7 @@ void* kmalloc(unsigned int size)
 		initializeKheap();
 	}
 
-	cprintf("kmalloc is called with size = %d \n", size);
+	//cprintf("kmalloc is called with size = %d \n", size);
 	//TODO: [PROJECT'23.MS2 - #03] [1] KERNEL HEAP - kmalloc()
 	//refer to the project presentation and documentation for details
 	// use "isKHeapPlacementStrategyFIRSTFIT() ..." functions to check the current strategy

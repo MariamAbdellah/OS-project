@@ -320,8 +320,8 @@ void fault_handler(struct Trapframe *tf)
 	// Read processor's CR2 register to find the faulting address
 	fault_va = rcr2();
 
-		//cprintf("Faulted VA = %x\n", fault_va);
-		//print_trapframe(tf);
+		cprintf("Faulted VA = %x\n", fault_va);
+		print_trapframe(tf);
 
 	/******************************************************/
 	/*2022*///If same fault va for 3 times, then panic
@@ -387,34 +387,34 @@ void fault_handler(struct Trapframe *tf)
 
 
 			uint32 page_permissions = pt_get_page_permissions (faulted_env->env_page_directory, fault_va);
-			if((page_permissions &PERM_PRESENT)&& (pd_is_table_used(faulted_env->env_page_directory, fault_va)))//dir?????
-			{
-				uint32 valid = *(tf->tf_eip);
-				userTrap=1;
-			}
-			else
-			{
+//			if((page_permissions &PERM_PRESENT)&& (pd_is_table_used(faulted_env->env_page_directory, fault_va)))//dir?????
+//			{
+//				uint32 valid = *(tf->tf_eip);
+//				userTrap=1;
+//			}
+//			else
+//			{
 				if(fault_va >= USER_HEAP_START && fault_va < USER_HEAP_MAX)
 				{
 					if((page_permissions & PERM_AVAILABLE) == 0)
 					{
-						cprintf("invalid pointer");
+						cprintf("invalid pointer1\n");
 					    sched_kill_env(faulted_env->env_id);
 					}
 				}
 				else if((page_permissions & PERM_PRESENT) == 1 && (page_permissions & PERM_USER) == 0)
 				{
-					cprintf("invalid pointer");
+					cprintf("invalid pointer2\n");
 					sched_kill_env(faulted_env->env_id);
 				}
 
 				else if((page_permissions & PERM_WRITEABLE) == 0 && (page_permissions & PERM_PRESENT) == 1)//check present before writable
 				{
-					 cprintf("invalid pointer");
+					 cprintf("invalid pointer3\n");
 					 sched_kill_env(faulted_env->env_id);
 				}
-			}
-					//panic("page_fault_handler() is not implemented yet...!!");
+//			}
+//					//panic("page_fault_handler() is not implemented yet...!!");
 		}
 
 		/*2022: Check if fault due to Access Rights */

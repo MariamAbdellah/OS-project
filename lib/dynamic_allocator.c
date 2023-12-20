@@ -99,7 +99,7 @@ bool is_initialized = 0;
 //==================================
 void initialize_dynamic_allocator(uint32 daStart, uint32 initSizeOfAllocatedSpace)
 {
-	cprintf("dynamic allocator initialization is called \n");
+	//cprintf("dynamic allocator initialization is called \n");
 
 
    //=========================================

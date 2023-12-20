@@ -558,38 +558,27 @@ void env_set_nice(struct Env* e, int nice_value)
 	//Comment the following line
 	//panic("Not implemented yet");
 
+	cprintf("*****env_set_nice is called***** \n");
+
 	e->nice = nice_value;
 
-	/* if running? t or every process s*/
-	int t = timer_ticks();
-	fixed_point_t recent_cpu1 = e->recent_cpu;
-	fixed_point_t r = fix_unscale(recent_cpu1, 4);
-	//int nice = nice_value * 2;
-	int recent = fix_trunc(r);
+	cprintf("e->nice value is updated \n");
 
-	if(e->env_status == ENV_NEW)
-	{
-		int prev_priority = e->priority;
+	cprintf("checking if env is not new \n");
+	if(e->env_status != ENV_NEW){
+		cprintf("env not new \n");
+		//int prev_priority = e->priority;
 
-			int priority = PRI_MAX - recent - (nice_value * 2);
-			e->priority = priority;
-			if (e->priority > PRI_MAX){
-				e->priority = PRI_MAX;
-			}
-			else if (e->priority < PRI_MIN){
-				e->priority = PRI_MIN;
-			}
+		e->priority = PRI_MAX - fix_trunc(fix_unscale(e->recent_cpu, 4)) - (e->nice * 2);
 
-			if(priority != prev_priority)
-			{
-				remove_from_queue(&env_ready_queues[prev_priority], e);
-				enqueue(&(env_ready_queues[priority]), e);
-			}
-
-
+		if (e->priority > PRI_MAX){
+			e->priority = PRI_MAX;
+		}
+		else if (e->priority < PRI_MIN){
+			e->priority = PRI_MIN;
+		}
+		cprintf("updated priority based on new nice value [recent_cpu not recalculated \n");
 	}
-
-
 }
 int env_get_recent_cpu(struct Env* e)
 {
@@ -598,37 +587,7 @@ int env_get_recent_cpu(struct Env* e)
 	//Comment the following line
 	//panic("Not implemented yet");
 
-	/*
-	int t = timer_ticks();
 
-	//load_avg[t] = get_load_average();
-	int load_avg = get_load_average();
-
-	int load_avg2 = 2 * load_avg;
-
-	int nice = env_get_nice(e);
-
-	fixed_point_t nem = fix_int(load_avg2);
-	fixed_point_t denem = fix_int(load_avg2 + 1);
-	fixed_point_t div = fix_div(nem, denem);
-
-	int tprev = t-1;
-	fixed_point_t mul = fix_mul(div , e->recent_cpu[tprev]);
-	//fixed_point_t recent_cpu = mul + nice;
-	//e->recent_cpu[t] = recent_cpu;
-
-
-	return 0;
-
-	//return fix_round(fix_scale(recent_cpu, 100));
-	*/
-
-	/*
-	int t = timer_ticks();
-
-	fixed_point_t recent_cpu = e->recent_cpu[t];
-	return (fix_round(fix_scale(recent_cpu, 100)));
-	*/
 	return fix_round(fix_scale(e->recent_cpu, 100));
 }
 int get_load_average()
@@ -637,53 +596,7 @@ int get_load_average()
 	//Your code is here
 	//Comment the following line
 	//panic("Not implemented yet");
-	/*
-	int ready_processes = 0;
-	for(int i = PRI_MIN; i <= PRI_MAX; i++)
-	{
-		ready_processes += queue_size(&(env_ready_queues[i]));
-	}
 
-	int t = timer_ticks();
-	fixed_point_t x = fix_int(59);
-	fixed_point_t y = fix_int(60);
-	fixed_point_t z = fix_int(1);
-
-	fixed_point_t div1 = fix_div(x,y);
-	fixed_point_t div2 = fix_div(z,y);
-
-	int tprev = t + 1;
-	if (tprev == 0){
-		//load_avg[tprev] = 0;
-		load_avg[tprev] = fix_scale(div2, ready_processes);
-		//load_avg[t] = fix_scale(div2, ready_processes);
-
-	}
-
-
-	fixed_point_t mul1 = fix_mul(div1, load_avg[tprev]);
-	fixed_point_t mul2 = fix_scale(div2, ready_processes);
-
-	load_avg[t] = fix_add(mul1, mul2);
-	fixed_point_t load = load_avg[t];
-	//fixed_point_t scaled = fix_scale(load, 100);
-	//return (fix_round(scaled));
-
-
-	load_avg[t] = fix_add(fix_mul(div1, load_avg[tprev]), fix_scale(div2, ready_processes));
-	 */
-
-	/*
-	//load_avg(t) = 59/60 * load_avg(t-1) + 1/60 * ready_processes(t)
-	int t = timer_ticks();
-	fixed_point_t seconds = fix_int(t * quantums[1]);
-	seconds = fix_unscale(seconds, 1000);
-	t = fix_trunc(seconds);
-	fixed_point_t load = load_avg[t];
-	//fixed_point_t scaled_load = fix_scale(load, 100);
-	//return (fix_round(scaled_load));
-
-*/
 	return fix_round(fix_scale(load_avg, 100));
 	//return 0;
 }

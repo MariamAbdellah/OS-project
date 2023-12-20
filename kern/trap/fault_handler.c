@@ -75,8 +75,37 @@ void table_fault_handler(struct Env * curenv, uint32 fault_va)
 void readpagefromPF(struct Env * curenv, uint32 fault_va)
 {
 	struct FrameInfo *fi_ptr = NULL;
-	int val = pf_read_env_page(curenv,(void *)fault_va);
 
+	int val =allocate_frame(&fi_ptr);
+	/*
+	if(fi_ptr != NULL)
+	{
+
+	}
+	*/
+
+
+
+
+	map_frame(curenv->env_page_directory, fi_ptr,fault_va, PERM_PRESENT | PERM_USER | PERM_WRITEABLE);
+	fi_ptr->va = fault_va;
+
+	val = pf_read_env_page(curenv,(void *)fault_va);
+
+	if(val == E_PAGE_NOT_EXIST_IN_PF)
+	{
+		if(!((fault_va < USTACKTOP && fault_va >= USTACKBOTTOM) || (fault_va >= USER_HEAP_START && fault_va < USER_HEAP_MAX)))
+		{
+
+			sched_kill_env(curenv->env_id);
+
+		}
+	}
+
+
+
+	//int val = pf_read_env_page(curenv,(void *)fault_va);
+/*
 	if(val == E_PAGE_NOT_EXIST_IN_PF)
 	{
 		if(fault_va < USTACKTOP && fault_va >= USTACKBOTTOM)
@@ -107,6 +136,7 @@ void readpagefromPF(struct Env * curenv, uint32 fault_va)
 		fi_ptr->va = fault_va;
 		//val=pf_update_env_page(curenv,fault_va,fi_ptr);
 	}
+	*/
 }
 
 //Handle the page fault
@@ -142,11 +172,11 @@ void page_fault_handler(struct Env * curenv, uint32 fault_va)
 			//readpagefromPF(curenv, fault_va);
 
 			struct FrameInfo *fi_ptr = NULL;
-			allocate_frame(&fi_ptr);
-			map_frame(curenv->env_page_directory, fi_ptr,fault_va, PERM_PRESENT | PERM_USER | PERM_WRITEABLE);
+			int val = allocate_frame(&fi_ptr);
+			map_frame(curenv->env_page_directory, fi_ptr,fault_va, PERM_PRESENT | PERM_USER | PERM_WRITEABLE | PERM_AVAILABLE);
 			fi_ptr->va = fault_va;
 
-			int val = pf_read_env_page(curenv,(void *)fault_va);
+			val = pf_read_env_page(curenv,(void *)fault_va);
 			if(val == E_PAGE_NOT_EXIST_IN_PF)
 			{
 				//cprintf("Entered condition E_PAGE_NOT_EXIST_IN_PF");
@@ -167,18 +197,18 @@ void page_fault_handler(struct Env * curenv, uint32 fault_va)
 			}
 			else// if(LIST_SIZE(&(curenv->page_WS_list)) < curenv->page_WS_max_size)
 			{
-				curenv->page_last_WS_element = new_element;
+				curenv->page_last_WS_element = NULL;
 			}
 
 		}
 		else
 		{
 			struct FrameInfo *fi_ptr = NULL;
-			allocate_frame(&fi_ptr);
-			map_frame(curenv->env_page_directory, fi_ptr,fault_va, PERM_PRESENT | PERM_USER | PERM_WRITEABLE);
+			int val = allocate_frame(&fi_ptr);
+			map_frame(curenv->env_page_directory, fi_ptr,fault_va, PERM_PRESENT | PERM_USER | PERM_WRITEABLE | PERM_AVAILABLE);
 			fi_ptr->va = fault_va;
 
-			int val = pf_read_env_page(curenv,(void *)fault_va);
+			val = pf_read_env_page(curenv,(void *)fault_va);
 			if(val == E_PAGE_NOT_EXIST_IN_PF)
 			{
 				//cprintf("Entered condition E_PAGE_NOT_EXIST_IN_PF");
@@ -256,11 +286,11 @@ void page_fault_handler(struct Env * curenv, uint32 fault_va)
 				//readpagefromPF(curenv, fault_va);
 
 				struct FrameInfo *fi_ptr = NULL;
-				allocate_frame(&fi_ptr);
-				map_frame(curenv->env_page_directory, fi_ptr,fault_va, PERM_PRESENT | PERM_USER | PERM_WRITEABLE);
+				int val = allocate_frame(&fi_ptr);
+				map_frame(curenv->env_page_directory, fi_ptr,fault_va, PERM_PRESENT | PERM_USER | PERM_WRITEABLE | PERM_AVAILABLE);
 				fi_ptr->va = fault_va;
 
-				int val = pf_read_env_page(curenv,(void *)fault_va);
+				val = pf_read_env_page(curenv,(void *)fault_va);
 				if(val == E_PAGE_NOT_EXIST_IN_PF)
 				{
 					//cprintf("Entered condition E_PAGE_NOT_EXIST_IN_PF");
@@ -316,7 +346,7 @@ void page_fault_handler(struct Env * curenv, uint32 fault_va)
 
 					struct FrameInfo *fi_ptr = NULL;
 					allocate_frame(&fi_ptr);
-					map_frame(curenv->env_page_directory, fi_ptr,fault_va, PERM_PRESENT | PERM_USER | PERM_WRITEABLE);
+					map_frame(curenv->env_page_directory, fi_ptr,fault_va, PERM_PRESENT | PERM_USER | PERM_WRITEABLE | PERM_AVAILABLE);
 					fi_ptr->va = fault_va;
 
 					int val = pf_read_env_page(curenv,(void *)fault_va);
@@ -389,11 +419,11 @@ void page_fault_handler(struct Env * curenv, uint32 fault_va)
 			{
 
 				struct FrameInfo *fi_ptr = NULL;
-				allocate_frame(&fi_ptr);
+				int val = allocate_frame(&fi_ptr);
 				map_frame(curenv->env_page_directory, fi_ptr,fault_va, PERM_PRESENT | PERM_USER | PERM_WRITEABLE);
 				fi_ptr->va = fault_va;
 
-				int val = pf_read_env_page(curenv,(void *)fault_va);
+				val = pf_read_env_page(curenv,(void *)fault_va);
 				if(val == E_PAGE_NOT_EXIST_IN_PF)
 				{
 					//cprintf("Entered condition E_PAGE_NOT_EXIST_IN_PF");

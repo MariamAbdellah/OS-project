@@ -49,14 +49,14 @@ void initializeUserList()
 	//cprintf("\n ****trying to find first addr with alloc_block_FF **** \n");
 	//void * firstaddr = ;
 	UfirstBlock = (struct BlockSizeInfo *)alloc_block_FF(sizeOfBlockInfo());
-	cprintf("**888888888888888888888 user first block address = %x** \n", UfirstBlock);
+	//cprintf("**888888888888888888888 user first block address = %x** \n", UfirstBlock);
 	uint32 PageSegementSize = USER_HEAP_MAX - (daLimit + (uint32)PAGE_SIZE);
 	UfirstBlock->va = daLimit + PAGE_SIZE;
 	UfirstBlock->size = PageSegementSize;
 	UfirstBlock->is_free= 1;
 	//cprintf("passed \n");
-	cprintf("UfirstBlock = %x, va = %x, size = %d, is_free = %d \n",
-			UfirstBlock, UfirstBlock->va, UfirstBlock->size, UfirstBlock->is_free);
+	//cprintf("UfirstBlock = %x, va = %x, size = %d, is_free = %d \n",
+			//UfirstBlock, UfirstBlock->va, UfirstBlock->size, UfirstBlock->is_free);
 
 	LIST_INIT(&USizeBlockList);
 	LIST_INSERT_HEAD(&USizeBlockList,UfirstBlock);
@@ -69,7 +69,7 @@ void initializeUserList()
 void* malloc(uint32 size)
 {
 
-	cprintf("malloc is called with size = %d \n", size);
+	//cprintf("malloc is called with size = %d \n", size);
 	//==============================================================
 	//DON'T CHANGE THIS CODE========================================
 	InitializeUHeap();

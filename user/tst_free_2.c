@@ -320,7 +320,7 @@ void _main(void)
 	{
 		cprintf("	5.1: in block coalesces with NEXT\n\n") ;
 
-		printBlist();
+		//printBlist();
 
 		is_correct = 1;
 		actualSize = 4*sizeof(int);

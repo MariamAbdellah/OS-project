@@ -442,21 +442,78 @@ void env_run(struct Env *e)
 //
 void env_free(struct Env *e)
 {
-	/*REMOVE THIS LINE BEFORE START CODING*/
-	return;
+	///REMOVE THIS LINE BEFORE START CODING/
+	//return;
 	/**************************************/
 
 	//TODO: [PROJECT'23.MS3 - BONUS] EXIT ENV: env_free
 	// your code is here, remove the panic and write your code
-	{
-		panic("env_free() is not implemented yet...!!");
+	/*{
+		//panic("env_free() is not implemented yet...!!");
+		struct WorkingSetElement *ptr_WS_element = NULL;
+		bool found = 0;
+		if(isPageReplacmentAlgorithmLRU(PG_REP_LRU_LISTS_APPROX))
+		{
+			LIST_FOREACH(ptr_WS_element, &(e->ActiveList))
+	    	{
+				if(ptr_WS_element != NULL)
+				{
+					unmap_frame(e->env_page_directory, ptr_WS_element->virtual_address);
+					LIST_REMOVE(&(e->ActiveList), ptr_WS_element);
+					kfree(ptr_WS_element);
+					pt_set_page_permissions(e->env_page_directory, ptr_WS_element->virtual_address, PERM_PRESENT, 0);
+					pt_clear_page_table_entry(e,ptr_WS_element->virtual_address);
+				}
+				else break;
+	    	}
+			LIST_FOREACH(ptr_WS_element, &(e->SecondList))
+			{
+				if(ptr_WS_element!=NULL)
+				{
+					unmap_frame(e->env_page_directory, ptr_WS_element->virtual_address);
+					LIST_REMOVE(&(e->ActiveList), ptr_WS_element);
+					kfree(ptr_WS_element);
+					pt_set_page_permissions(e->env_page_directory, ptr_WS_element->virtual_address, PERM_PRESENT, 0);
+					pt_clear_page_table_entry(e,ptr_WS_element->virtual_address);
+				}
+				else break;
+			}
+
+		}
+		else if (isPageReplacmentAlgorithmFIFO())
+		{
+			LIST_FOREACH(ptr_WS_element, &(e->ActiveList))
+			{
+				if(ptr_WS_element!=NULL)
+				{
+					unmap_frame(e->env_page_directory, ptr_WS_element->virtual_address);
+					LIST_REMOVE(&(e->ActiveList), ptr_WS_element);
+					kfree(ptr_WS_element);
+					pt_set_page_permissions(e->env_page_directory, ptr_WS_element->virtual_address, PERM_PRESENT, 0);
+					pt_clear_page_table_entry(e,ptr_WS_element->virtual_address);
+				} else break;
+			}
+		}
+
+		struct WorkingSetElement *wse;
+		LIST_FOREACH(wse, &(e->page_WS_list))
+		{
+
+				if (e->page_last_WS_element == wse)
+				{
+					e->page_last_WS_element = LIST_NEXT(wse);
+
+				LIST_REMOVE(&(e->page_WS_list), wse);
+
+				kfree(wse);
+				pt_clear_page_table_entry(e,wse->virtual_address);
+				}
+				else break;
+
+		}
 
 
-
-
-
-
-	}
+	}*/
 
 	// [9] remove this program from the page file
 	/*(ALREADY DONE for you)*/

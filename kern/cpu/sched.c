@@ -270,11 +270,11 @@ struct Env* fos_scheduler_BSD()
 			//quantums[i] = quantums[0];
 
 			kclock_set_quantum(quantums[i]);
-			if(env_to_run != NULL)
-			{
+//			if(env_to_run != NULL)
+//			{
 				break;
-
-			}
+//
+//			}
 		}
 	}
 
@@ -349,9 +349,6 @@ void clock_interrupt_handler()
 						fixed_point_t a_recent_cpu = fix_mul(a, env->recent_cpu);
 						fixed_point_t fnice = fix_int(env->nice);
 						env->recent_cpu = fix_add(a_recent_cpu, fnice);
-
-
-
 					}
 
 					/*

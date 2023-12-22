@@ -58,7 +58,7 @@ void _main(void)
 	int expectedNumOfFrames, actualNumOfFrames;
 	void* ptr_allocations[20] = {0};
 	{
-		cprintf("3\n");
+		//cprintf("3\n");
 
 		//2 MB
 		{

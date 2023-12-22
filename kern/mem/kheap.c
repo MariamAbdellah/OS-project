@@ -253,7 +253,7 @@ void* kmalloc(unsigned int size)
 
 void kfree(void* virtual_address)
 {
-	cprintf("free is called with va = %x \n", virtual_address);
+	//cprintf("free is called with va = %x \n", virtual_address);
 	//TODO: [PROJECT'23.MS2 - #04] [1] KERNEL HEAP - kfree()
 	//refer to the project presentation and documentation for details
 	// Write your code here, remove the panic and write your code

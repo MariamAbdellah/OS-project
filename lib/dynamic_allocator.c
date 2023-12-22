@@ -445,7 +445,7 @@ void free_block(void *va)
 {
 	//TODO: [PROJECT'23.MS1 - #7] [3] DYNAMIC ALLOCATOR - free_block()
 	//panic("free_block is not implemented yet");
-	cprintf("free block is called with address %x \n", va);
+	//cprintf("free block is called with address %x \n", va);
 	    struct BlockMetaData *temptr=(struct BlockMetaData *)KERNEL_HEAP_START;
 
 	    if(va==0){

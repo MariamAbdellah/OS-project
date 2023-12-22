@@ -229,7 +229,7 @@ void page_fault_handler(struct Env * curenv, uint32 fault_va)
 				uint32* ptr_page_table = NULL;
 				struct FrameInfo* frame_ptr = get_frame_info(curenv->env_page_directory, First_element->virtual_address, &ptr_page_table);
 				int ret = pf_update_env_page(curenv, First_element->virtual_address, frame_ptr);
-				cprintf("updated pf\n");
+				//cprintf("updated pf\n");
 			}
 			LIST_REMOVE(&(curenv->page_WS_list),First_element);
 			struct FrameInfo *ptr_frame_info = get_frame_info(curenv->env_page_directory,First_element->virtual_address, &ptr_page_table);
@@ -246,7 +246,7 @@ void page_fault_handler(struct Env * curenv, uint32 fault_va)
 			curenv->page_last_WS_element = LIST_FIRST(&(curenv->page_WS_list));
 			//curenv->page_last_WS_element=New_element;
 
-			cprintf("ennnddd fifiooooo func \n");
+			//cprintf("ennnddd fifiooooo func \n");
 
 
 		}
@@ -270,7 +270,7 @@ void page_fault_handler(struct Env * curenv, uint32 fault_va)
 			//(activeSize < curenv->ActiveListSize && secondSize < curenv->SecondListSize)
 		{
 
-			cprintf("placement fault_va = %x\n", fault_va);
+			//cprintf("placement fault_va = %x\n", fault_va);
 
 			//check if va already exists in any of the two lists
 
@@ -382,7 +382,7 @@ void page_fault_handler(struct Env * curenv, uint32 fault_va)
 		else
 		{
 
-			cprintf("****************entered replacement with fault_va = %x****************\n", fault_va);
+			//cprintf("****************entered replacement with fault_va = %x****************\n", fault_va);
 
 			int foundSL = 0;
 			int count = 0;
